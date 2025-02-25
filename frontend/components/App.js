@@ -47,7 +47,10 @@ const schema = yup.object().shape({
     .string()
     .oneOf(["pizza", "spaghetti", "broccoli"], e.favFoodOptions)
     .required(e.favFoodRequired),
-  agreement: yup.boolean().oneOf([true], e.agreementRequired),
+  agreement: yup
+    .boolean()
+    .oneOf([true], e.agreementOptions)
+    .required(e.agreementRequired),
 });
 
 export default function App() {
@@ -110,7 +113,7 @@ export default function App() {
         setFormValues(initialFormValues);
       })
       .catch((err) => {
-        setFailure(err);
+        setFailure(err || { username: "Sorry! Username is taken" });
       })
       .finally(() => setFormValues(initialFormValues));
   };
@@ -122,7 +125,8 @@ export default function App() {
       <h2>Create an Account</h2>
       <form onSubmit={onSubmit}>
         {success && <h4 className="success">{success}</h4>}
-        {failure && <h4 className="error">Sorry! Username is taken</h4>}
+        {/* {failure && <h4 className="error">Sorry! Username is taken</h4>} */}
+        {/* need to see endpoint data for username check */}
 
         <div className="inputGroup">
           <label htmlFor="username">Username:</label>
