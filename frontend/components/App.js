@@ -27,18 +27,26 @@ const e = {
   agreementRequired: "agreement is required",
   agreementOptions: "agreement must be accepted",
 };
+
 const initialDisabled = true;
 
 // ✨ TASK: BUILD YOUR FORM SCHEMA HERE
 // The schema should use the error messages contained in the object above.
 const schema = yup.object().shape({
-  username: yup.string().trim().required(e.usernameRequired),
+  username: yup
+    .string()
+    .trim()
+    .required(e.usernameRequired)
+    .min(3, e.usernameMin)
+    .max(20, e.usernameMax),
   favLanguage: yup
     .string()
-    .oneOf(["rust", "javascript"], e.favLanguageRequired),
+    .oneOf(["rust", "javascript"], e.favLanguageOptions)
+    .required(e.favLanguageRequired),
   favFood: yup
     .string()
-    .oneOf(["pizza", "spaghetti", "broccoli"], e.favFoodRequired),
+    .oneOf(["pizza", "spaghetti", "broccoli"], e.favFoodOptions)
+    .required(e.favFoodRequired),
   agreement: yup.boolean().oneOf([true], e.agreementRequired),
 });
 
@@ -113,8 +121,8 @@ export default function App() {
       {/* TASK: COMPLETE THE JSX */}
       <h2>Create an Account</h2>
       <form onSubmit={onSubmit}>
-        <h4 className="success">{success}</h4>
-        <h4 className="error">Sorry! Username is taken</h4>
+        {success && <h4 className="success">{success}</h4>}
+        {failure && <h4 className="error">Sorry! Username is taken</h4>}
 
         <div className="inputGroup">
           <label htmlFor="username">Username:</label>
@@ -125,7 +133,9 @@ export default function App() {
             placeholder="Type Username"
             onChange={onChange}
           />
-          <div className="validation">{failure.username}</div>
+          {failure.username && (
+            <div className="validation">{failure.username}</div>
+          )}
         </div>
 
         <div className="inputGroup">
@@ -152,7 +162,9 @@ export default function App() {
               Rust
             </label>
           </fieldset>
-          <div className="validation">{failure.favLanguage}</div>
+          {failure.favLanguage && (
+            <div className="validation">{failure.favLanguage}</div>
+          )}
         </div>
 
         <div className="inputGroup">
@@ -163,7 +175,9 @@ export default function App() {
             <option value="spaghetti">Spaghetti</option>
             <option value="broccoli">Broccoli</option>
           </select>
-          <div className="validation">{failure.favFood}</div>
+          {failure.favFood && (
+            <div className="validation">{failure.favFood}</div>
+          )}
         </div>
 
         <div className="inputGroup">
@@ -176,7 +190,9 @@ export default function App() {
             />
             Agree to our terms
           </label>
-          <div className="validation">{failure.agreement}</div>
+          {failure.agreement && (
+            <div className="validation">{failure.agreement}</div>
+          )}
         </div>
 
         <div>
